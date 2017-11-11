@@ -38,6 +38,8 @@ SUBDIRS := \
 . \
 .metadata/.plugins/org.eclipse.cdt.make.core \
 core/core \
+libraries/TimerOne \
+libraries/TimerThree \
 libraries/VL6180X \
 libraries/Wire/src \
 libraries/Wire/src/utility \

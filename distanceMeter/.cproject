@@ -24,6 +24,8 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/distanceMeter/libraries/VL6180X}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/distanceMeter/libraries/Wire}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/distanceMeter/libraries/Wire/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/distanceMeter/libraries/TimerOne}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/distanceMeter/libraries/TimerThree}&quot;"/>
 								</option>
 								<inputType id="io.sloeber.compiler.cpp.sketch.input.679372108" name="CPP source files" superClass="io.sloeber.compiler.cpp.sketch.input"/>
 							</tool>
@@ -34,6 +36,8 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/distanceMeter/libraries/VL6180X}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/distanceMeter/libraries/Wire}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/distanceMeter/libraries/Wire/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/distanceMeter/libraries/TimerOne}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/distanceMeter/libraries/TimerThree}&quot;"/>
 								</option>
 								<inputType id="io.sloeber.compiler.c.sketch.input.1388505153" name="C Source Files" superClass="io.sloeber.compiler.c.sketch.input"/>
 							</tool>
@@ -44,6 +48,8 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/distanceMeter/libraries/VL6180X}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/distanceMeter/libraries/Wire}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/distanceMeter/libraries/Wire/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/distanceMeter/libraries/TimerOne}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/distanceMeter/libraries/TimerThree}&quot;"/>
 								</option>
 								<inputType id="io.sloeber.compiler.S.sketch.input.2124119905" name="Assembly source files" superClass="io.sloeber.compiler.S.sketch.input"/>
 							</tool>

@@ -12,6 +12,8 @@ RM := del
 -include libraries\Wire\src\utility\subdir.mk
 -include libraries\Wire\src\subdir.mk
 -include libraries\VL6180X\subdir.mk
+-include libraries\TimerThree\subdir.mk
+-include libraries\TimerOne\subdir.mk
 -include core\core\subdir.mk
 -include .metadata\.plugins\org.eclipse.cdt.make.core\subdir.mk
 -include objects.mk
