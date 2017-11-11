@@ -19,22 +19,20 @@ uint8_t input=0;
 uint8_t pwmPercentage=0;
 double pwmScale=0; //0..1
 
+bool sensorUpdate=false;
+bool pwmUpdate=false;
+bool pwmState=false;
+
 int i=0;
 
 void sensorValue(void)
 {
-	//Serial.println("sensor read");
-
-	/*Serial.print(i);
-	Serial.print(";");*/
-	Serial.println(LightRanger.readRangeSingleMillimeters());
+	sensorUpdate=true;
 }
 
 inline void pwmBinary()
 {
-	//inverts output 4, working
-	//Serial.println("enable inverted");
-	digitalWrite(MotorEnPin, !digitalRead(MotorEnPin));
+	pwmUpdate=true;
 }
 
 
@@ -134,18 +132,17 @@ void setup()
 	digitalWrite(26,1);
 	digitalWrite(MotorEnPin,1);
 
-	Timer1.initialize(500000);
-	Timer3.initialize(50000);
-	/*Timer1.start();*/
+	Timer1.initialize(1500000);
+	Timer3.initialize(10000);
 
 	Timer1.attachInterrupt(pwmBinary);
 	Timer3.attachInterrupt(sensorValue);
 
-	Serial.print("millis");
+	/*Serial.print("millis");
 	Serial.print(";");
 	Serial.print("pwm fill factor");
 	Serial.print(";");
-	Serial.println("sensor distance in mm");
+	Serial.println("sensor distance in mm");*/
 }
 
 
@@ -158,5 +155,23 @@ void loop()
 	//Serial.println(reference);
 	//linearPWM(130,2000,100);
 	//steppedPWM(120, 160, 5, 180);
+
+	if(sensorUpdate)
+	{
+		sensorUpdate=false;
+		//Serial.println("sensor handled");
+		Serial.print(millis());
+		Serial.print(";");
+		Serial.print(pwmState);
+		Serial.print(";");
+		Serial.println(LightRanger.readRangeSingleMillimeters());
+	}
+	if(pwmUpdate)
+	{
+		pwmUpdate=false;
+		//Serial.println("pwm handled");
+		pwmState=digitalRead(MotorEnPin);
+		digitalWrite(MotorEnPin, !pwmState);
+	}
 
 }
