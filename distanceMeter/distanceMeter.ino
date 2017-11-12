@@ -133,20 +133,20 @@ void setup()
 	digitalWrite(26,1);
 	digitalWrite(MotorEnPin,1);
 
-	Timer1.initialize(250000);
+	Timer1.initialize(1000000);
 	Timer3.initialize(7000);
 
 	Timer1.attachInterrupt(pwmBinary);
 	Timer3.attachInterrupt(sensorValue);
 
-	analogWrite(MotorEnPin,210);
+	analogWrite(MotorEnPin,250);
 
 	Serial.print("millis");
 	Serial.print(";");
 	Serial.print("pwm fill factor");
 	Serial.print(";");
 	Serial.println("sensor distance in mm");
-	delay(550);
+	delay(1450);
 
 }
 
@@ -178,15 +178,15 @@ void loop()
 				//pwmState=digitalRead(MotorEnPin);
 				//digitalWrite(MotorEnPin, !pwmState);
 		if(pwmState){
-			analogWrite(MotorEnPin,100);
+			analogWrite(MotorEnPin,255);
 
 			pwmState=0;
-			pwmVal=100.0/255;
+			pwmVal=255.0/255;
 		}
 		else {
-			analogWrite(MotorEnPin,190);
+			analogWrite(MotorEnPin,0);
 			pwmState=1;
-			pwmVal=190.0/255;
+			pwmVal=0.0/255;
 		}
 	}
 
