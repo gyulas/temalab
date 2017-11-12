@@ -22,6 +22,7 @@ double pwmScale=0; //0..1
 bool sensorUpdate=false;
 bool pwmUpdate=false;
 bool pwmState=false;
+double pwmVal=0;
 
 int i=0;
 
@@ -121,7 +122,7 @@ void setup()
 	LightRanger.configureDefault();
 	//set timeout!
 
-	delay(1000);
+	delay(50);
 
 	pinMode(27, OUTPUT);
 	pinMode(26, OUTPUT);
@@ -132,17 +133,21 @@ void setup()
 	digitalWrite(26,1);
 	digitalWrite(MotorEnPin,1);
 
-	Timer1.initialize(1500000);
-	Timer3.initialize(10000);
+	Timer1.initialize(250000);
+	Timer3.initialize(7000);
 
 	Timer1.attachInterrupt(pwmBinary);
 	Timer3.attachInterrupt(sensorValue);
 
-	/*Serial.print("millis");
+	analogWrite(MotorEnPin,210);
+
+	Serial.print("millis");
 	Serial.print(";");
 	Serial.print("pwm fill factor");
 	Serial.print(";");
-	Serial.println("sensor distance in mm");*/
+	Serial.println("sensor distance in mm");
+	delay(550);
+
 }
 
 
@@ -162,7 +167,7 @@ void loop()
 		//Serial.println("sensor handled");
 		Serial.print(millis());
 		Serial.print(";");
-		Serial.print(pwmState);
+		Serial.print(pwmVal);
 		Serial.print(";");
 		Serial.println(LightRanger.readRangeSingleMillimeters());
 	}
@@ -170,8 +175,19 @@ void loop()
 	{
 		pwmUpdate=false;
 		//Serial.println("pwm handled");
-		pwmState=digitalRead(MotorEnPin);
-		digitalWrite(MotorEnPin, !pwmState);
+				//pwmState=digitalRead(MotorEnPin);
+				//digitalWrite(MotorEnPin, !pwmState);
+		if(pwmState){
+			analogWrite(MotorEnPin,100);
+
+			pwmState=0;
+			pwmVal=100.0/255;
+		}
+		else {
+			analogWrite(MotorEnPin,190);
+			pwmState=1;
+			pwmVal=190.0/255;
+		}
 	}
 
 }
