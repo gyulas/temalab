@@ -17,23 +17,49 @@ uint8_t reference=0;
 uint8_t corrected=0;
 uint8_t input=0;
 uint8_t pwmPercentage=0;
+
+//reference
+uint8_t rk=0;
+uint8_t rk_1=0;
+//controller output PWM %
+double uk=0;
+uint8_t uk_1=0;
+//plant output, mm
+uint8_t yk=0;
+uint8_t yk_1=0;
+//hibajel
+uint8_t ek=0;
+uint8_t ek_1=0;
+
+//50ms sample
+//error computing
+//uk computing
+//shift in discrete time domain
+//for the values r,e and u
+
+double Ap=1;
+double Ti=0.1;
+double Ts=0.050; //Ts=50ms
+
+long int count1_us=0;
+long int count2_us=0;
 double pwmScale=0; //0..1
 
-bool sensorUpdate=false;
+bool controller=false;
 bool pwmUpdate=false;
 bool pwmState=false;
 double pwmVal=0;
 
 int i=0;
 
-void sensorValue(void)
+void controllerRun(void)
 {
-	sensorUpdate=true;
+	controller=true;
 }
 
 inline void pwmBinary()
 {
-	pwmUpdate=true;
+	//pwmUpdate=true;
 }
 
 
@@ -116,10 +142,11 @@ void steppedPWM(uint8_t min, uint8_t max, uint8_t ts, uint8_t burst)
 void setup()
 {
 // Add your initialization code here
-	Serial.begin(115200);
+	Serial.begin(9600);
 	Wire.begin();
 	LightRanger.init();
 	LightRanger.configureDefault();
+
 	//set timeout!
 
 	delay(50);
@@ -134,43 +161,59 @@ void setup()
 	digitalWrite(MotorEnPin,1);
 
 	Timer1.initialize(1000000);
-	Timer3.initialize(7000);
+	Timer3.initialize(50000);
 
 	Timer1.attachInterrupt(pwmBinary);
-	Timer3.attachInterrupt(sensorValue);
+	Timer3.attachInterrupt(controllerRun);
 
 	analogWrite(MotorEnPin,250);
 
-	Serial.print("millis");
+	/*Serial.print("millis");
 	Serial.print(";");
 	Serial.print("pwm fill factor");
 	Serial.print(";");
-	Serial.println("sensor distance in mm");
-	delay(1450);
+	Serial.println("sensor distance in mm");*/
 
+	LightRanger.setScaling(3);
+/*
+	//LightRanger.
+	Serial.print("threshold high and low");
+	Serial.print("\t");
+	Serial.println("mm:");
+	Serial.println(LightRanger.readRangeSingleMillimeters());
+	//delay(1450);
+*/
 }
 
 
 // The loop function is called in an endless loop
 void loop()
 {
-	//mm=LightRanger.readRangeSingleMillimeters();
-	/*Serial.print("distance: \t");
-	Serial.println(mm);*/
+	//LightRanger.readRangeContinuousMillimeters()
+	//count1_us=micros();
+	mm=LightRanger.readRangeSingleMillimeters();
+	//count2_us=micros();
+
+	Serial.print("distance: \t");
+	Serial.println(mm);
+	Serial.print("\t time [us]: \t");
+	Serial.println(count2_us-count1_us);
+
 	//Serial.println(reference);
 	//linearPWM(130,2000,100);
 	//steppedPWM(120, 160, 5, 180);
 
-	if(sensorUpdate)
+	if(controller)
 	{
-		sensorUpdate=false;
-		//Serial.println("sensor handled");
-		Serial.print(millis());
-		Serial.print(";");
-		Serial.print(pwmVal);
-		Serial.print(";");
-		Serial.println(LightRanger.readRangeSingleMillimeters());
+		yk=LightRanger.readRangeSingleMillimeters();
+		ek=rk-yk;
+		uk=uk_1+(Ap*Ts/(2*Ti)*(ek-ek_1))+Ap*(ek-ek_1);
+		analogWrite(MotorEnPin,uk);
+		ek_1=ek;
+		uk_1=uk;
+		rk_1=rk;
 	}
+
 	if(pwmUpdate)
 	{
 		pwmUpdate=false;

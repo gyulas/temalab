@@ -55,7 +55,7 @@ endif
 
 # Add inputs and outputs from these tool invocations to the build variables 
 AR += \
-C:\ard\distanceMeter\Release\arduino.ar \
+C:\sloeber\work\distanceMeter\Release\arduino.ar \
 
 ELF += \
 distanceMeter.elf \
@@ -71,19 +71,19 @@ all: distanceMeter
 distanceMeter: $(HEX)
 	@echo 'Building target: $@'
 	@echo 'Printing size:'
-	"C:\sloeber\/arduinoPlugin/packages/arduino/tools/avr-gcc/4.9.2-atmel3.5.4-arduino2/bin/avr-size" -A "C:/ard/distanceMeter/Release/distanceMeter.elf"
+	"C:\sloeber\/arduinoPlugin/packages/arduino/tools/avr-gcc/4.9.2-atmel3.5.4-arduino2/bin/avr-size" -A "C:/sloeber/work/distanceMeter/Release/distanceMeter.elf"
 	@echo 'Finished building target: $@'
 	@echo ' '
 
-C:\ard\distanceMeter\Release\arduino.ar: $(AR_OBJ)
+C:\sloeber\work\distanceMeter\Release\arduino.ar: $(AR_OBJ)
 	@echo 'Starting archiver'
-	"C:\sloeber\/arduinoPlugin/packages/arduino/tools/avr-gcc/4.9.2-atmel3.5.4-arduino2/bin/avr-gcc-ar" rcs    C:/ard/distanceMeter/Release/arduino.ar $(AR_OBJ)
+	"C:\sloeber\/arduinoPlugin/packages/arduino/tools/avr-gcc/4.9.2-atmel3.5.4-arduino2/bin/avr-gcc-ar" rcs    C:/sloeber/work/distanceMeter/Release/arduino.ar $(AR_OBJ)
 	@echo 'Finished building: $@'
 	@echo ' '
 
 distanceMeter.elf: $(LINK_OBJ) $(AR)
 	@echo 'Starting combiner'
-	"C:\sloeber\/arduinoPlugin/packages/arduino/tools/avr-gcc/4.9.2-atmel3.5.4-arduino2/bin/avr-gcc" -Wall -Wextra -Os -Wl,--gc-sections,--relax -mmcu=atmega2560 -o "C:\ard\distanceMeter/Release/distanceMeter.elf"   $(LINK_OBJ) $(AR)   C:/ard/distanceMeter/Release/arduino.ar  "-LC:\ard\distanceMeter/Release" -lm
+	"C:\sloeber\/arduinoPlugin/packages/arduino/tools/avr-gcc/4.9.2-atmel3.5.4-arduino2/bin/avr-gcc" -Wall -Wextra -Os -Wl,--gc-sections,--relax -mmcu=atmega2560 -o "C:\sloeber\work\distanceMeter/Release/distanceMeter.elf"   $(LINK_OBJ) $(AR)   C:/sloeber/work/distanceMeter/Release/arduino.ar  "-LC:\sloeber\work\distanceMeter/Release" -lm
 	@echo 'Finished building: $@'
 	@echo ' '
 
