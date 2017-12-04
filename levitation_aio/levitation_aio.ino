@@ -7,13 +7,13 @@
 
 void timingISR(void)
 {
-	uread = true;
-	ucontroller = true;
-	uwrite = true;
+	//uread = true;
+	//ucontroller = true;
 	usend = true;
 
 	if (!(iISR % 100))
 	{
+		uwrite = true;
 		rk=(rk)?(255):(0);
 	}
 
