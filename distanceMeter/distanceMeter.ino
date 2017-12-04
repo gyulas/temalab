@@ -18,18 +18,23 @@ uint8_t corrected=0;
 uint8_t input=0;
 uint8_t pwmPercentage=0;
 
+uint8_t number;
+
 //reference
-uint8_t rk=0;
-uint8_t rk_1=0;
+double rk=0;
+double rk_1=0;
 //controller output PWM %
 double uk=0;
-uint8_t uk_1=0;
+double uk_1=0;
+double uk_sat=0;
+uint8_t uk_out=0;
+
 //plant output, mm
-uint8_t yk=0;
-uint8_t yk_1=0;
+double yk=0;
+double yk_1=0;
 //hibajel
-uint8_t ek=0;
-uint8_t ek_1=0;
+double ek=0;
+double ek_1=0;
 
 //50ms sample
 //error computing
@@ -37,34 +42,35 @@ uint8_t ek_1=0;
 //shift in discrete time domain
 //for the values r,e and u
 
-double Ap=1;
-double Ti=0.1;
+double Ap=2;
+double Ti=0.05;
 double Ts=0.050; //Ts=50ms
 
 long int count1_us=0;
 long int count2_us=0;
 double pwmScale=0; //0..1
 
-bool controller=false;
-bool pwmUpdate=false;
-bool pwmState=false;
-double pwmVal=0;
+bool controllerUpdate=false;
+bool receiveCommand=false;
 
 int i=0;
 
 void controllerRun(void)
 {
-	controller=true;
+	//runs the controller 1 step
+	controllerUpdate=true;
 }
 
 inline void pwmBinary()
 {
-	//pwmUpdate=true;
+	//updates reference signal
+	receiveCommand=true;
 }
 
 
 void linearPWM(uint8_t min, uint8_t max, uint8_t wait)
 {
+	//test function
 	//int i=min;
 	for(i=min;i<max;i++)
 	{
@@ -138,23 +144,56 @@ void steppedPWM(uint8_t min, uint8_t max, uint8_t ts, uint8_t burst)
 	}
 }
 
-//The setup function is called once at startup of the sketch
+
+void changeReference()
+{
+	//set the reference based on input
+	if(Serial.available())
+	{
+		input=Serial.read();
+		switch (input)
+			{
+			case 43: // '+'
+				if(rk==500)
+					{rk=500;}
+				else {rk++;}
+				break;
+			case 45: //'-'
+				if(rk==0)
+					{rk=0;}
+				else {rk--;}
+				break;
+			default:
+				//48-57: 0..9 numeric
+				if(input>47 && input<58)
+				{
+					pwmPercentage=(input-48);  //ASCII48= '0' --> 0%, resolution 10%
+					rk=map(pwmPercentage,0,9,200,350);
+				}
+				break;
+			}
+		Serial.print("rk:\t\t");
+		Serial.println(rk);
+		Serial.print("uk:\t");
+		Serial.println(uk);
+		Serial.print("uk_out:\t");
+		Serial.println(uk_out);
+		Serial.print("yk:\t");
+		Serial.println(yk);
+	}
+}
+
 void setup()
 {
-// Add your initialization code here
-	Serial.begin(9600);
+	Serial.begin(115200);
 	Wire.begin();
 	LightRanger.init();
 	LightRanger.configureDefault();
-
-	//set timeout!
-
 	delay(50);
 
 	pinMode(27, OUTPUT);
 	pinMode(26, OUTPUT);
 	pinMode(4, OUTPUT);
-
 
 	digitalWrite(27,0);
 	digitalWrite(26,1);
@@ -167,69 +206,35 @@ void setup()
 	Timer3.attachInterrupt(controllerRun);
 
 	analogWrite(MotorEnPin,250);
-
-	/*Serial.print("millis");
-	Serial.print(";");
-	Serial.print("pwm fill factor");
-	Serial.print(";");
-	Serial.println("sensor distance in mm");*/
-
 	LightRanger.setScaling(3);
-/*
-	//LightRanger.
-	Serial.print("threshold high and low");
-	Serial.print("\t");
-	Serial.println("mm:");
-	Serial.println(LightRanger.readRangeSingleMillimeters());
-	//delay(1450);
-*/
+
 }
 
-
-// The loop function is called in an endless loop
 void loop()
 {
-	//LightRanger.readRangeContinuousMillimeters()
-	//count1_us=micros();
-	mm=LightRanger.readRangeSingleMillimeters();
-	//count2_us=micros();
-
-	Serial.print("distance: \t");
-	Serial.println(mm);
-	Serial.print("\t time [us]: \t");
-	Serial.println(count2_us-count1_us);
-
-	//Serial.println(reference);
+//test
 	//linearPWM(130,2000,100);
 	//steppedPWM(120, 160, 5, 180);
 
-	if(controller)
+	if(controllerUpdate)
 	{
 		yk=LightRanger.readRangeSingleMillimeters();
 		ek=rk-yk;
 		uk=uk_1+(Ap*Ts/(2*Ti)*(ek-ek_1))+Ap*(ek-ek_1);
-		analogWrite(MotorEnPin,uk);
+		uk_sat=(uk>1000)?(1000):((uk<-1000)?(-1000):(uk));
+		uk_out=map(uk_sat,+500,-500,0,255);
+		analogWrite(MotorEnPin,uk_out);
 		ek_1=ek;
 		uk_1=uk;
 		rk_1=rk;
+
+		//referencia 200-ig mehesen le
 	}
 
-	if(pwmUpdate)
+	if(receiveCommand)
 	{
-		pwmUpdate=false;
-		//Serial.println("pwm handled");
-				//pwmState=digitalRead(MotorEnPin);
-				//digitalWrite(MotorEnPin, !pwmState);
-		if(pwmState){
-			analogWrite(MotorEnPin,255);
-
-			pwmState=0;
-			pwmVal=255.0/255;
-		}
-		else {
-			analogWrite(MotorEnPin,0);
-			pwmState=1;
-			pwmVal=0.0/255;
+		if(Serial.available()){
+			changeReference();
 		}
 	}
 
