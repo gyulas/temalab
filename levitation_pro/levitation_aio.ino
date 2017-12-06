@@ -20,15 +20,17 @@ void timingISR(void)
 	}
 }
 
+int aw=0;
 void controllerUpdate()
 {
 	//readPlantOutput();
 
+	aw=(uk_sat==500||uk_sat==-500)?(0):(1);	//antiwindup
 	ek=rk-yk;  //12-nal 280--> negativ uk, 10>poz-abb uk++
-	uk=uk_1+(Ap*Ts/(2*Ti)*(ek+ek_1))+Ap*(ek-ek_1);
+	uk=uk_1+(Ap*Ts*aw/(2*Ti)*(ek+ek_1))+Ap*(ek-ek_1);
 
-	uk_sat=(uk>1000)?(1000):((uk<-1000)?(-1000):(uk));
-	uk_out=map(uk_sat,+100,-1000,0,255);
+	uk_sat=(uk>500)?(500):((uk<-500)?(-500):(uk));
+	uk_out=map(uk_sat,+500,-500,0,255);
 	analogWrite(MotorEnPin,uk_out);
 
 	ek_1=ek;
@@ -95,18 +97,6 @@ void writeData ()
 #endif
 
 #ifdef LabVIEW
-	//reference signal on 3 digit
-	if(rk>99)
-		{
-			Serial.print(int(rk));
-		}
-		else
-		{
-			Serial.print(0);
-			Serial.print(int(rk));
-		}
-	Serial.print(",");
-
 	//control signal on 3 digit
 	if(uk_out>99)
 		{
