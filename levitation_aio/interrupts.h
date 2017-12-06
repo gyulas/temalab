@@ -20,7 +20,7 @@
 #define period 50000 //in microseconds
 #define inEachCycle 1
 #define inEverySecondCycle 2
-#define inEveryTenthCycle 10
+#define inEveryTenthCycle 10	//for tasks to be performed less frequently
 
 /*
  * Booleans to notify the main() to handle the periodically generated interrupts:

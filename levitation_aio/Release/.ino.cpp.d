@@ -10,13 +10,14 @@
  C:\sloeber\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\cores\arduino/USBAPI.h \
  C:\sloeber\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\cores\arduino/Arduino.h \
  C:\sloeber\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\variants\mega/pins_arduino.h \
- C:\sloeber\arduinoPlugin\libraries\TimerOne\1.1.0/TimerOne.h \
- C:\sloeber\arduinoPlugin\libraries\TimerOne\1.1.0/config/known_16bit_timers.h \
  ..\sensor.h \
  C:\sloeber\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\libraries\Wire\src/Wire.h \
  C:\sloeber\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\cores\arduino/Stream.h \
  C:\sloeber\arduinoPlugin\libraries\VL6180X\1.2.0/VL6180X.h \
- ..\controller.h ..\interrupts.h ..\levitation_aio.ino
+ ..\controller.h ..\interrupts.h \
+ C:\sloeber\arduinoPlugin\libraries\TimerOne\1.1.0/TimerOne.h \
+ C:\sloeber\arduinoPlugin\libraries\TimerOne\1.1.0/config/known_16bit_timers.h \
+ ..\levitation_aio.ino
 
 C:\sloeber\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\cores\arduino/Arduino.h:
 
@@ -40,10 +41,6 @@ C:\sloeber\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\cores\arduino/Ardu
 
 C:\sloeber\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\variants\mega/pins_arduino.h:
 
-C:\sloeber\arduinoPlugin\libraries\TimerOne\1.1.0/TimerOne.h:
-
-C:\sloeber\arduinoPlugin\libraries\TimerOne\1.1.0/config/known_16bit_timers.h:
-
 ..\sensor.h:
 
 C:\sloeber\arduinoPlugin\packages\arduino\hardware\avr\1.6.20\libraries\Wire\src/Wire.h:
@@ -55,5 +52,9 @@ C:\sloeber\arduinoPlugin\libraries\VL6180X\1.2.0/VL6180X.h:
 ..\controller.h:
 
 ..\interrupts.h:
+
+C:\sloeber\arduinoPlugin\libraries\TimerOne\1.1.0/TimerOne.h:
+
+C:\sloeber\arduinoPlugin\libraries\TimerOne\1.1.0/config/known_16bit_timers.h:
 
 ..\levitation_aio.ino:
