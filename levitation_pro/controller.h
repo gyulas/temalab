@@ -43,8 +43,8 @@ uint8_t uk_out=0;
  *  Properties:
  */
 
-double Ap=0.5;
-double Ti=0.1;
+double Ap=1;
+double Ti=1;
 double Ts=0.050; //Ts=50ms
 
 /*

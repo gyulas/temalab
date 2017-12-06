@@ -3,6 +3,8 @@
 #include "controller.h"
 #include "interrupts.h"
 
+#define LabVIEW
+
 void timingISR(void)
 {
 	//to perform in every cycle:
@@ -22,30 +24,35 @@ void controllerUpdate()
 {
 	//readPlantOutput();
 
-	ek=rk-yk;
-	uk=uk_1+(Ap*Ts/(2*Ti)*(ek-ek_1))+Ap*(ek-ek_1);
+	ek=rk-yk;  //12-nal 280--> negativ uk, 10>poz-abb uk++
+	uk=uk_1+(Ap*Ts/(2*Ti)*(ek+ek_1))+Ap*(ek-ek_1);
 
-	uk_sat=(uk>200)?(200):((uk<-200)?(-200):(uk));
-	uk_out=map(uk_sat,+200,-200,0,255);
+	uk_sat=(uk>1000)?(1000):((uk<-1000)?(-1000):(uk));
+	uk_out=map(uk_sat,+100,-1000,0,255);
 	analogWrite(MotorEnPin,uk_out);
 
 	ek_1=ek;
-	uk_1=uk;
+	uk_1=uk_sat;
 	rk_1=rk;
 
 	//writePlantInput();
 }
 
-//int input=0; to COM port use
+int input=0; //to COM port use
 
 void changeReference()
 {
+#ifdef LabVIEW
 	if(Serial.available())
 		{
 			rk=Serial.read();
 		}
+#endif
 
-	/* MANUAL ON SERIAL PORT
+
+#ifndef LabVIEW
+
+	//MANUAL ON SERIAL PORT
 	//set the reference based on input
 	if(Serial.available())
 	{
@@ -71,11 +78,23 @@ void changeReference()
 				break;
 			}
 	}
-	*/
+#endif
 }
 
 void writeData ()
 {
+#ifndef LabVIEW
+	Serial.print("rk:\t");
+	Serial.print(rk);
+	Serial.print("\tuk:\t");
+	Serial.print(uk);
+	Serial.print("\tuk_out:\t");
+	Serial.print(uk_out);
+	Serial.print("\tyk:\t");
+	Serial.println(yk);
+#endif
+
+#ifdef LabVIEW
 	//reference signal on 3 digit
 	if(rk>99)
 		{
@@ -111,7 +130,7 @@ void writeData ()
 		Serial.print(int(yk));
 	}
 	Serial.print(";");
-
+#endif
 }
 
 void setup()
