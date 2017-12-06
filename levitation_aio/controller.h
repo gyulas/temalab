@@ -47,6 +47,10 @@ double Ap=2;
 double Ti=0.05;
 double Ts=0.050; //Ts=50ms
 
+/*double Ap=0.31;
+double Ti=0.6;
+double Ts=0.050;*/
+
 /*
  *  III. How it is works
  *
